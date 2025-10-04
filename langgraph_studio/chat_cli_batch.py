@@ -7,6 +7,8 @@ Uses batch_extraction graph for processing user + assistant messages together
 import os
 import sys
 import json
+import asyncio
+import threading
 from datetime import datetime
 from dotenv import load_dotenv
 from langchain_anthropic import ChatAnthropic
@@ -78,8 +80,51 @@ def get_conversation_context():
     return "\n".join(context)
 
 
+def run_extraction_async(batch_input):
+    """Run extraction in background thread."""
+    def _run():
+        try:
+            result = graph.invoke(batch_input)
+
+            # Print extraction summaries
+            print("\n" + "="*80)
+            print("🧠 BACKGROUND EXTRACTION COMPLETE")
+            print("="*80)
+            print_extraction_summary("user", result)
+            print_extraction_summary("assistant", result)
+
+            # Storage summary
+            stored_ids = result.get('stored_proposition_ids', [])
+            storage_time = result.get('storage_time', 0)
+
+            print(f"\n💾 STORAGE:")
+            print("-" * 80)
+            print(f"   Propositions stored in Neo4j: {len(stored_ids)}")
+            print(f"   Archive stored in SQLite: ✓")
+            print(f"   Storage time: {storage_time:.2f}s")
+            print("-" * 80)
+
+            # Overall timing
+            total_time = (
+                result.get('stage1_user_time', 0) +
+                result.get('stage1_assistant_time', 0) +
+                result.get('stage2_user_time', 0) +
+                result.get('stage2_assistant_time', 0) +
+                storage_time
+            )
+            print(f"\n⏱️  TOTAL BATCH PROCESSING TIME: {total_time:.2f}s")
+            print(f"   (Stage 1: {result.get('stage1_user_time', 0) + result.get('stage1_assistant_time', 0):.2f}s | Stage 2: {result.get('stage2_user_time', 0) + result.get('stage2_assistant_time', 0):.2f}s | Storage: {storage_time:.2f}s)")
+            print("="*80 + "\n")
+            print("👤 You: ", end="", flush=True)
+        except Exception as e:
+            print(f"\n❌ Background extraction error: {e}")
+
+    thread = threading.Thread(target=_run, daemon=True)
+    thread.start()
+
+
 def chat_turn(user_input):
-    """Process one turn of conversation with BATCH extraction."""
+    """Process one turn of conversation with FIRE-AND-FORGET extraction."""
     global message_counter
 
     # Get chat response
@@ -96,9 +141,7 @@ def chat_turn(user_input):
 
     print(assistant_response)
 
-    # BATCH extraction - process BOTH messages together
-    print("\n🧠 Extracting semantic knowledge (BATCH mode)...")
-
+    # Prepare extraction (but don't wait for it)
     timestamp = datetime.now().isoformat()
     # Get context BEFORE adding current messages to history
     context = get_conversation_context()
@@ -112,7 +155,7 @@ def chat_turn(user_input):
     message_counter += 1
     assistant_msg_id = f"msg_{message_counter:03d}"
 
-    # Run BATCH extraction graph (processes both messages in one run)
+    # Run BATCH extraction in BACKGROUND (fire-and-forget)
     batch_input = {
         "user_message": user_input,
         "assistant_message": assistant_response,
@@ -122,44 +165,17 @@ def chat_turn(user_input):
         "assistant_message_id": assistant_msg_id
     }
 
-    result = graph.invoke(batch_input)
-
-    # Print extraction summaries
-    print_extraction_summary("user", result)
-    print_extraction_summary("assistant", result)
-
-    # Storage summary
-    stored_ids = result.get('stored_proposition_ids', [])
-    storage_time = result.get('storage_time', 0)
-
-    print(f"\n💾 STORAGE:")
-    print("-" * 80)
-    print(f"   Propositions stored in Neo4j: {len(stored_ids)}")
-    print(f"   Archive stored in SQLite: ✓")
-    print(f"   Storage time: {storage_time:.2f}s")
-    print("-" * 80)
-
-    # Overall timing
-    total_time = (
-        result.get('stage1_user_time', 0) +
-        result.get('stage1_assistant_time', 0) +
-        result.get('stage2_user_time', 0) +
-        result.get('stage2_assistant_time', 0) +
-        storage_time
-    )
-    print(f"\n⏱️  TOTAL BATCH PROCESSING TIME: {total_time:.2f}s")
-    print(f"   (Stage 1: {result.get('stage1_user_time', 0) + result.get('stage1_assistant_time', 0):.2f}s | Stage 2: {result.get('stage2_user_time', 0) + result.get('stage2_assistant_time', 0):.2f}s | Storage: {storage_time:.2f}s)")
+    print("\n🚀 Extraction started in background...")
+    run_extraction_async(batch_input)
     print_separator()
-
-    return result
 
 
 def main():
     """Main CLI loop."""
     print_separator()
-    print("🧠 ReSemantic CLI Chat (BATCH Extraction)")
-    print("Conversational AI with Semantic Extraction")
-    print("Processing user + assistant messages together")
+    print("🧠 ReSemantic CLI Chat (FIRE-AND-FORGET Mode)")
+    print("Conversational AI with Background Semantic Extraction")
+    print("💬 Chat responds instantly | 🚀 Extraction runs in background")
     print_separator()
     print("Commands:")
     print("  /exit or /quit - Exit chat")
