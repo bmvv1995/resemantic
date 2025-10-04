@@ -1,0 +1,1014 @@
+{
+  "metadata": {
+    "test": "Stage 2 comparison - FIXED Baseline vs DSPy",
+    "stage_1": "FIXED semantic units (same for both)",
+    "stage_2a": "FIXED Baseline (strict no-hallucination)",
+    "stage_2b": "DSPy structured signatures",
+    "total_messages": 8
+  },
+  "messages": [
+    {
+      "message_index": 1,
+      "original_content": "buna. ce inseamna pentru tine o unitate semantica?",
+      "semantic_unit": {
+        "unit_id": "unit_001",
+        "content": "User-ul salută și întreabă ce înseamnă o unitate semantică pentru asistent.",
+        "speaker": "user",
+        "timestamp": "2025-09-30T18:00:00Z",
+        "type": "question",
+        "narrative_role": "core",
+        "concepts": [
+          "unitate semantică"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [],
+        "impact": "minor",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 2,
+        "propositions": [
+          {
+            "content": "User-ul salută.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "User-ul întreabă ce înseamnă o unitate semantică.",
+            "type": "question",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 2,
+        "propositions": [
+          {
+            "content": "User greets the assistant.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "user",
+              "greeting"
+            ]
+          },
+          {
+            "content": "User asks what a semantic unit means for the assistant.",
+            "type": "question",
+            "certainty": "high",
+            "concepts": [
+              "semantic unit",
+              "meaning",
+              "assistant"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 2,
+      "original_content": "O unitate semantică este o grupare de elemente care formează împreună un înțeles complet și coerent. În lingvistică și procesare a limbajului natural, poate fi:\n\n- **Propozițiile/frazele** - unități complete de sens\n- **Sintagmele** - grupuri de cuvinte care funcționează împreună (ex: \"casa albă\", \"a merge repede\")\n- **Paragrafele** - unități tematice mai mari\n- **Conceptele semantice** - idei sau noțiuni discrete\n\nÎn contextul programării și AI, o unitate semantică poate însemna:\n\n- **Blocuri de cod** care îndeplinesc o funcție logică completă\n- **Chunking-uri de text** în sisteme RAG/embedding - segmente care păstrează sensul intact\n- **Entități** - obiecte sau concepte distincte într-un graf de cunoștințe\n\nEsența este că o unitate semantică trebuie să fie **auto-suficientă din punct de vedere al înțelesului** - să poată fi înțeleasă independent sau cu context minimal, fără a fi fragmentată în moduri care distorsionează sensul.",
+      "semantic_unit": {
+        "unit_id": "unit_002",
+        "content": "Asistentul explică ce reprezintă o unitate semantică, definind-o ca o grupare de elemente care formează un înțeles complet și coerent. El oferă exemple din lingvistică și procesarea limbajului natural, cum ar fi propozițiile, sintagmele, paragrafele și conceptele semantice. De asemenea, asistentul detaliază semnificația unității semantice în contextul programării și inteligenței artificiale, menționând blocuri de cod, chunking-uri de text și entități. Esența acestei definiții este că o unitate semantică trebuie să fie auto-suficientă din punct de vedere al înțelesului, putând fi înțeleasă independent sau cu un context minim.",
+        "speaker": "assistant",
+        "timestamp": "2025-09-30T18:00:30Z",
+        "type": "information",
+        "narrative_role": "core",
+        "concepts": [
+          "unitate semantică",
+          "lingvistică",
+          "procesare a limbajului natural",
+          "propoziții",
+          "sintagme",
+          "paragrafe",
+          "concepte semantice",
+          "programare",
+          "inteligență artificială",
+          "blocuri de cod",
+          "chunking-uri de text",
+          "entități"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "Răspuns la întrebarea user-ului despre semnificația unei unități semantice."
+        ],
+        "impact": "major",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 8,
+        "propositions": [
+          {
+            "content": "Asistentul explică ce reprezintă o unitate semantică.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          },
+          {
+            "content": "O unitate semantică este o grupare de elemente care formează un înțeles complet și coerent.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          },
+          {
+            "content": "Asistentul oferă exemple din lingvistică și procesarea limbajului natural.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "lingvistică",
+              "procesare a limbajului natural"
+            ]
+          },
+          {
+            "content": "Exemplele includ propozițiile, sintagmele, paragrafele și conceptele semantice.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziții",
+              "sintagme",
+              "paragrafe",
+              "concepte semantice"
+            ]
+          },
+          {
+            "content": "Asistentul detaliază semnificația unității semantice în contextul programării și inteligenței artificiale.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "programare",
+              "inteligență artificială"
+            ]
+          },
+          {
+            "content": "Unitatea semantică este relevantă pentru blocuri de cod, chunking-uri de text și entități.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "blocuri de cod",
+              "chunking-uri de text",
+              "entități"
+            ]
+          },
+          {
+            "content": "O unitate semantică trebuie să fie auto-suficientă din punct de vedere al înțelesului.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          },
+          {
+            "content": "O unitate semantică poate fi înțeleasă independent sau cu un context minim.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 5,
+        "propositions": [
+          {
+            "content": "O unitate semantică este o grupare de elemente care formează un înțeles complet și coerent.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          },
+          {
+            "content": "Exemple de unități semantice includ propozițiile, sintagmele, paragrafele și conceptele semantice.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziții",
+              "sintagme",
+              "paragrafe",
+              "concepte semantice"
+            ]
+          },
+          {
+            "content": "Unitatea semantică are o semnificație importantă în programare și inteligența artificială.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "programare",
+              "inteligență artificială"
+            ]
+          },
+          {
+            "content": "Unitățile semantice pot include blocuri de cod, chunking-uri de text și entități.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "blocuri de cod",
+              "chunking-uri de text",
+              "entități"
+            ]
+          },
+          {
+            "content": "O unitate semantică trebuie să fie auto-suficientă din punct de vedere al înțelesului.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "unitate semantică"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 3,
+      "original_content": "sti despre \"refactorizare semantică\" sau \"propoziționalizare\" ?",
+      "semantic_unit": {
+        "unit_id": "unit_003",
+        "content": "User-ul întreabă dacă asistentul cunoaște despre conceptele de 'refactorizare semantică' și 'propoziționalizare'.",
+        "speaker": "user",
+        "timestamp": "2025-09-30T18:01:00Z",
+        "type": "question",
+        "narrative_role": "core",
+        "concepts": [
+          "refactorizare semantică",
+          "propoziționalizare"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "User-ul a discutat anterior despre unități semantice, ceea ce sugerează un interes în concepte avansate de procesare a limbajului natural."
+        ],
+        "impact": "minor",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 2,
+        "propositions": [
+          {
+            "content": "User-ul întreabă dacă asistentul cunoaște despre refactorizare semantică",
+            "type": "question",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică"
+            ]
+          },
+          {
+            "content": "User-ul întreabă dacă asistentul cunoaște despre propoziționalizare",
+            "type": "question",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 2,
+        "propositions": [
+          {
+            "content": "User-ul întreabă dacă asistentul cunoaște despre refactorizarea semantică.",
+            "type": "question",
+            "certainty": "medium",
+            "concepts": [
+              "refactorizare semantică"
+            ]
+          },
+          {
+            "content": "User-ul întreabă dacă asistentul cunoaște despre propoziționalizare.",
+            "type": "question",
+            "certainty": "medium",
+            "concepts": [
+              "propoziționalizare"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 4,
+      "original_content": "Da, sunt concepte fascinante din procesarea limbajului natural și knowledge graphs!\n\n**Propoziționalizarea** (proposition extraction) este procesul de descompunere a textului în **afirmații atomice, verificabile** - propoziții simple care exprimă o singură relație sau fapt. De exemplu:\n\n*Text original:* \"Maria, profesoara de matematică, a predat timp de 20 de ani la liceu.\"\n\n*Propoziții:*\n- Maria este profesoară de matematică\n- Maria a predat la liceu\n- Maria a predat timp de 20 de ani\n\n**Refactorizarea semantică** ar fi reorganizarea/restructurarea informației păstrând sensul intact, dar optimizând pentru:\n- **Claritate** - eliminarea ambiguității\n- **Atomicitate** - o propoziție = un fapt\n- **Consistență** - format uniform\n- **Refolosibilitate** - în sisteme de reasoning, RAG, knowledge graphs\n\nAcestea sunt utile pentru:\n- **Question-answering** - matching mai precis\n- **Fact-checking** - verificare granulară\n- **Knowledge graphs** - relații (subiect-predicat-obiect)\n- **RAG systems** - retrieval mai relevant",
+      "semantic_unit": {
+        "unit_id": "unit_004",
+        "content": "Asistentul confirmă că este familiar cu conceptele de 'refactorizare semantică' și 'propoziționalizare', explicând că propoziționalizarea este procesul de descompunere a textului în afirmații atomice, care sunt propoziții simple ce exprimă o singură relație sau fapt. Asistentul oferă un exemplu de text și îl descompune în propoziții. De asemenea, asistentul definește refactorizarea semantică ca fiind reorganizarea informației pentru a păstra sensul intact, dar optimizând claritatea, atomicitatea, consistența și refolosibilitatea. Asistentul menționează aplicațiile acestor concepte în domenii precum întrebări și răspunsuri, verificarea faptelor, grafurile de cunoștințe și sistemele RAG.",
+        "speaker": "assistant",
+        "timestamp": "2025-09-30T18:01:45Z",
+        "type": "information",
+        "narrative_role": "core",
+        "concepts": [
+          "propoziționalizare",
+          "refactorizare semantică",
+          "afirmații atomice",
+          "claritate",
+          "atomicitate",
+          "consistență",
+          "refolosibilitate",
+          "question-answering",
+          "fact-checking",
+          "knowledge graphs",
+          "RAG systems"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "Asistentul răspunde la întrebarea utilizatorului despre conceptele de refactorizare semantică și propoziționalizare."
+        ],
+        "impact": "major",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 10,
+        "propositions": [
+          {
+            "content": "Asistentul confirmă că este familiar cu conceptele de 'refactorizare semantică' și 'propoziționalizare'",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică",
+              "propoziționalizare"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea este procesul de descompunere a textului în afirmații atomice.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "afirmații atomice"
+            ]
+          },
+          {
+            "content": "Afirmațiile atomice sunt propoziții simple ce exprimă o singură relație sau fapt.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "afirmații atomice"
+            ]
+          },
+          {
+            "content": "Asistentul oferă un exemplu de text și îl descompune în propoziții.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Refactorizarea semantică este reorganizarea informației pentru a păstra sensul intact.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică"
+            ]
+          },
+          {
+            "content": "Refactorizarea semantică optimizează claritatea, atomicitatea, consistența și refolosibilitatea.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "claritate",
+              "atomicitate",
+              "consistență",
+              "refolosibilitate"
+            ]
+          },
+          {
+            "content": "Asistentul menționează aplicațiile acestor concepte în domenii precum întrebări și răspunsuri.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "question-answering"
+            ]
+          },
+          {
+            "content": "Asistentul menționează aplicațiile acestor concepte în domeniul verificării faptelor.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "fact-checking"
+            ]
+          },
+          {
+            "content": "Asistentul menționează aplicațiile acestor concepte în domeniul grafurilor de cunoștințe.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "knowledge graphs"
+            ]
+          },
+          {
+            "content": "Asistentul menționează aplicațiile acestor concepte în sistemele RAG.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "RAG systems"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 6,
+        "propositions": [
+          {
+            "content": "Asistentul confirmă că este familiar cu conceptele de 'refactorizare semantică' și 'propoziționalizare'.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică",
+              "propoziționalizare"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea este procesul de descompunere a textului în afirmații atomice.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "afirmații atomice"
+            ]
+          },
+          {
+            "content": "Afirmațiile atomice sunt propoziții simple ce exprimă o singură relație sau fapt.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "afirmații atomice"
+            ]
+          },
+          {
+            "content": "Refactorizarea semantică este reorganizarea informației pentru a păstra sensul intact.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică"
+            ]
+          },
+          {
+            "content": "Refactorizarea semantică optimizează claritatea, atomicitatea, consistența și refolosibilitatea.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "claritate",
+              "atomicitate",
+              "consistență",
+              "refolosibilitate"
+            ]
+          },
+          {
+            "content": "Asistentul menționează aplicațiile acestor concepte în domenii precum întrebări și răspunsuri, verificarea faptelor, grafurile de cunoștințe și sistemele RAG.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "question-answering",
+              "fact-checking",
+              "knowledge graphs",
+              "RAG systems"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 5,
+      "original_content": "da //cu adevarat fascinant si pentru intelegere si pentru embedings",
+      "semantic_unit": {
+        "unit_id": "unit_005",
+        "content": "User-ul confirmă că subiectul discutat este cu adevărat fascinant, atât pentru înțelegerea conceptelor, cât și pentru utilizarea embedings-urilor în procesarea limbajului natural.",
+        "speaker": "user",
+        "timestamp": "2025-09-30T18:02:00Z",
+        "type": "agreement",
+        "narrative_role": "supportive",
+        "concepts": [
+          "refactorizare semantică",
+          "propoziționalizare",
+          "embedings"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "User-ul se referă la discuția anterioară despre refactorizarea semantică și propoziționalizare, menționând că aceste concepte sunt interesante."
+        ],
+        "impact": "minor",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 6,
+        "propositions": [
+          {
+            "content": "User-ul confirmă că subiectul discutat este fascinant.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Subiectul discutat este fascinant pentru înțelegerea conceptelor.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Subiectul discutat este fascinant pentru utilizarea embedings-urilor în procesarea limbajului natural.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "embedings"
+            ]
+          },
+          {
+            "content": "Conceptele menționate includ refactorizare semantică.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică"
+            ]
+          },
+          {
+            "content": "Conceptele menționate includ propoziționalizare.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare"
+            ]
+          },
+          {
+            "content": "Conceptele menționate includ embedings.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "embedings"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 2,
+        "propositions": [
+          {
+            "content": "Subiectul discutat este fascinant pentru înțelegerea conceptelor.",
+            "type": "agreement",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică",
+              "propoziționalizare",
+              "embedings"
+            ]
+          },
+          {
+            "content": "Subiectul discutat este fascinant pentru utilizarea embedings-urilor în procesarea limbajului natural.",
+            "type": "agreement",
+            "certainty": "high",
+            "concepts": [
+              "refactorizare semantică",
+              "propoziționalizare",
+              "embedings"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 6,
+      "original_content": "Absolut! Propoziționalizarea rezolvă probleme fundamentale în RAG și embeddings:\n\n**Pentru embeddings:**\n- **Densitate semantică** - fiecare embedding captează UN concept clar, nu multiple idei amestecate\n- **Similaritate mai precisă** - query-ul \"Cine a predat matematică?\" se potrivește direct cu \"Maria este profesoară de matematică\", nu cu un paragraf întreg\n- **Reducerea zgomotului** - informații irelevante din context nu diluează vectorul",
+      "semantic_unit": {
+        "unit_id": "unit_006",
+        "content": "Asistentul explică beneficiile propoziționalizării în contextul embeddings și RAG (retrieval-augmented generation). El subliniază că propoziționalizarea îmbunătățește densitatea semantică a embeddings, asigurând că fiecare embedding reprezintă un concept clar, nu o combinație de idei. De asemenea, menționează că aceasta permite o similaritate mai precisă între întrebări și răspunsuri, exemplificând cu întrebarea 'Cine a predat matematică?' care se potrivește direct cu afirmația 'Maria este profesoară de matematică', în loc de a se potrivi cu un întreg paragraf. În plus, asistentul afirmă că propoziționalizarea ajută la reducerea zgomotului, eliminând informațiile irelevante care ar putea dilua vectorul.",
+        "speaker": "assistant",
+        "timestamp": "2025-09-30T18:02:30Z",
+        "type": "information",
+        "narrative_role": "core",
+        "concepts": [
+          "propoziționalizare",
+          "embeddings",
+          "densitate semantică",
+          "similaritate",
+          "zgomot"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "Asistentul răspunde la întrebarea utilizatorului despre propoziționalizare și refactorizare semantică, explicând cum acestea se aplică în embeddings."
+        ],
+        "impact": "major",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 7,
+        "propositions": [
+          {
+            "content": "Asistentul explică beneficiile propoziționalizării în contextul embeddings și RAG.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "embeddings",
+              "RAG"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea îmbunătățește densitatea semantică a embeddings.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "embeddings",
+              "densitate semantică"
+            ]
+          },
+          {
+            "content": "Fiecare embedding reprezintă un concept clar, nu o combinație de idei.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "embeddings"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea permite o similaritate mai precisă între întrebări și răspunsuri.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "similaritate"
+            ]
+          },
+          {
+            "content": "Întrebarea 'Cine a predat matematică?' se potrivește direct cu afirmația 'Maria este profesoară de matematică'.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "similaritate"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea ajută la reducerea zgomotului.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "zgomot"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea elimină informațiile irelevante care ar putea dilua vectorul.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "zgomot"
+            ]
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 6,
+        "propositions": [
+          {
+            "content": "Propoziționalizarea îmbunătățește densitatea semantică a embeddings.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "densitate semantică",
+              "embeddings"
+            ]
+          },
+          {
+            "content": "Fiecare embedding reprezintă un concept clar, nu o combinație de idei.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "embeddings",
+              "concept"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea permite o similaritate mai precisă între întrebări și răspunsuri.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "similaritate"
+            ]
+          },
+          {
+            "content": "Întrebarea 'Cine a predat matematică?' se potrivește direct cu afirmația 'Maria este profesoară de matematică'.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "similaritate"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea ajută la reducerea zgomotului.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "zgomot"
+            ]
+          },
+          {
+            "content": "Propoziționalizarea elimină informațiile irelevante care ar putea dilua vectorul.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "propoziționalizare",
+              "informații irelevante",
+              "vector"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 7,
+      "original_content": "am incercat cu spaCy...no way. e doar gramatical. haos pentru emebdings",
+      "semantic_unit": {
+        "unit_id": "unit_007",
+        "content": "User-ul menționează că a încercat să utilizeze spaCy, dar a constatat că nu este eficient pentru scopurile sale, considerându-l doar un instrument gramatical care nu funcționează bine pentru embeddings, descriind situația ca fiind haotică.",
+        "speaker": "user",
+        "timestamp": "2025-09-30T18:03:00Z",
+        "type": "feedback",
+        "narrative_role": "core",
+        "concepts": [
+          "spaCy",
+          "embeddings",
+          "gramatică"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "User-ul se referă la discuția anterioară despre propoziționalizare și embeddings, exprimând o opinie negativă despre spaCy în acest context."
+        ],
+        "impact": "minor",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 5,
+        "propositions": [
+          {
+            "content": "User-ul a încercat să utilizeze spaCy.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy"
+            ]
+          },
+          {
+            "content": "User-ul consideră că spaCy nu este eficient pentru scopurile sale.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy"
+            ]
+          },
+          {
+            "content": "User-ul consideră că spaCy este doar un instrument gramatical.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "gramatică"
+            ]
+          },
+          {
+            "content": "User-ul consideră că spaCy nu funcționează bine pentru embeddings.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "embeddings"
+            ]
+          },
+          {
+            "content": "User-ul descrie situația ca fiind haotică.",
+            "type": "opinion",
+            "certainty": "medium",
+            "concepts": []
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 5,
+        "propositions": [
+          {
+            "content": "User-ul a încercat să utilizeze spaCy.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy"
+            ]
+          },
+          {
+            "content": "User-ul consideră că spaCy nu este eficient pentru scopurile sale.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy"
+            ]
+          },
+          {
+            "content": "User-ul consideră spaCy doar un instrument gramatical.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "gramatică"
+            ]
+          },
+          {
+            "content": "User-ul descrie situația cu spaCy ca fiind haotică.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy"
+            ]
+          },
+          {
+            "content": "User-ul consideră că spaCy nu funcționează bine pentru embeddings.",
+            "type": "opinion",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "embeddings"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "message_index": 8,
+      "original_content": "Corect! spaCy face sentence **boundary detection** gramatical, nu **semantic chunking**.\n\nProblema:\n```python\ntext = \"Maria a zis că vine. Dar nu știu. Oricum, ea e profesoară de mate de 20 de ani.\"\n\n# spaCy → 3 sentences\n\"Maria a zis că vine.\"          # incomplet semantic\n\"Dar nu știu.\"                   # zero informație\n\"Oricum, ea e profesoară...\"    # coreferință nerezolvată (ea=?)\n```\n\nPentru embeddings trebuie **unități semantice complete**:\n- Rezolvare coreferințe (\"ea\" → \"Maria\")\n- Fuzionare fragmente incomplete\n- Split pe schimbări de topic, nu doar pe puncte",
+      "semantic_unit": {
+        "unit_id": "unit_008",
+        "content": "Asistentul confirmă că spaCy efectuează detecția limitelor de propoziție pe baza gramaticii, dar nu realizează gruparea semantică a frazelor. Apoi, oferă un exemplu de text care ilustrează problema, arătând cum spaCy împarte un text în propoziții care nu sunt complet semantice. Asistentul subliniază că pentru embeddings sunt necesare unități semantice complete, ceea ce implică rezolvarea coreferințelor, fuzionarea fragmentelor incomplete și împărțirea textului pe baza schimbărilor de subiect, nu doar pe baza punctuației.",
+        "speaker": "assistant",
+        "timestamp": "2025-09-30T18:03:30Z",
+        "type": "information",
+        "narrative_role": "core",
+        "concepts": [
+          "spaCy",
+          "detecția limitelor de propoziție",
+          "gruparea semantică",
+          "embeddings",
+          "coreferințe",
+          "fragmentare semantică"
+        ],
+        "entities": [],
+        "decisions": [],
+        "certainty": "high",
+        "context_dependencies": [
+          "Se referă la utilizarea spaCy menționată de utilizator în mesajul anterior."
+        ],
+        "impact": "major",
+        "relevance": "high"
+      },
+      "fixed_baseline_stage2": {
+        "count": 9,
+        "propositions": [
+          {
+            "content": "Asistentul confirmă că spaCy efectuează detecția limitelor de propoziție pe baza gramaticii.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "detecția limitelor de propoziție"
+            ]
+          },
+          {
+            "content": "Asistentul afirmă că spaCy nu realizează gruparea semantică a frazelor.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "gruparea semantică"
+            ]
+          },
+          {
+            "content": "Asistentul oferă un exemplu de text care ilustrează problema detecției limitelor de propoziție.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Exemplul arată cum spaCy împarte un text în propoziții care nu sunt complet semantice.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "fragmentare semantică"
+            ]
+          },
+          {
+            "content": "Asistentul subliniază că pentru embeddings sunt necesare unități semantice complete.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "embeddings"
+            ]
+          },
+          {
+            "content": "Unitățile semantice complete implică rezolvarea coreferințelor.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "coreferințe"
+            ]
+          },
+          {
+            "content": "Unitățile semantice complete implică fuzionarea fragmentelor incomplete.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Unitățile semantice complete implică împărțirea textului pe baza schimbărilor de subiect.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          },
+          {
+            "content": "Împărțirea textului nu se face doar pe baza punctuației.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": []
+          }
+        ]
+      },
+      "dspy_stage2": {
+        "count": 6,
+        "propositions": [
+          {
+            "content": "spaCy efectuează detecția limitelor de propoziție pe baza gramaticii.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "detecția limitelor de propoziție"
+            ]
+          },
+          {
+            "content": "spaCy nu realizează gruparea semantică a frazelor.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "spaCy",
+              "gruparea semantică"
+            ]
+          },
+          {
+            "content": "Pentru embeddings sunt necesare unități semantice complete.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "embeddings",
+              "unități semantice complete"
+            ]
+          },
+          {
+            "content": "Este necesară rezolvarea coreferințelor pentru a obține unități semantice complete.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "coreferințe",
+              "unități semantice complete"
+            ]
+          },
+          {
+            "content": "Fuzionarea fragmentelor incomplete este necesară pentru gruparea semantică.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "fragmentare semantică",
+              "gruparea semantică"
+            ]
+          },
+          {
+            "content": "Textul trebuie împărțit pe baza schimbărilor de subiect, nu doar pe baza punctuației.",
+            "type": "fact",
+            "certainty": "high",
+            "concepts": [
+              "împărțirea textului",
+              "schimbări de subiect"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

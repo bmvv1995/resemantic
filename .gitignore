@@ -1,0 +1,33 @@
+# Virtual environments
+venv/
+langgraph_env/
+streamlit_app/venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+
+# Data files
+data/
+*.db
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Neo4j
+neo4j/
+
+# Test outputs
+results/
+output/

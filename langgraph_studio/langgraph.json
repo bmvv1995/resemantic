@@ -1,0 +1,11 @@
+{
+  "dependencies": [
+    "langgraph",
+    "langchain-anthropic"
+  ],
+  "graphs": {
+    "extraction_pipeline": "./extraction_graph.py:graph",
+    "batch_extraction": "./extraction_graph_batch.py:graph"
+  },
+  "env": ".env"
+}
