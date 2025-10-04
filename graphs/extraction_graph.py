@@ -15,6 +15,8 @@ from dotenv import load_dotenv
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from storage import Neo4jClient, ArchiveDB, EmbeddingGenerator, cosine_similarity
+from config import ExtractionConfig, EmbeddingConfig, Neo4jConfig, SQLiteConfig
+from graphs.storage_nodes import generate_embeddings, store_propositions, create_edges
 
 # Load environment variables
 load_dotenv()
@@ -26,7 +28,8 @@ class BatchExtractionState(TypedDict):
     # Input
     user_message: str
     assistant_message: str
-    conversation_context: str  # Last 4-5 messages formatted
+    assistant_reasoning: str  # NEW: Reasoning/thinking from assistant response
+    conversation_history: List[Dict]  # Full conversation history before current pair
     timestamp: str
     user_message_id: str
     assistant_message_id: str
@@ -39,25 +42,57 @@ class BatchExtractionState(TypedDict):
     user_propositions: List[Dict]
     assistant_propositions: List[Dict]
 
+    # Embeddings
+    all_propositions: List[Dict]  # Combined propositions with metadata
+    proposition_embeddings: List[List[float]]  # Generated embeddings
+
     # Metadata
     stage1_user_time: float
     stage1_assistant_time: float
     stage2_user_time: float
     stage2_assistant_time: float
+    embedding_time: float
+    storage_time: float
+    edge_creation_time: float
     error: str
 
     # Storage outputs
     stored_proposition_ids: List[str]
-    storage_time: float
 
 
-# Initialize LLM
+# Initialize LLM with config
 llm = ChatAnthropic(
-    model="claude-3-5-haiku-20241022",
-    temperature=0.3,
-    max_tokens=1500,
-    api_key=os.getenv("ANTHROPIC_API_KEY")
+    model=ExtractionConfig.LLM_MODEL,
+    temperature=ExtractionConfig.LLM_TEMPERATURE,
+    max_tokens=ExtractionConfig.LLM_MAX_TOKENS,
+    api_key=ExtractionConfig.ANTHROPIC_API_KEY
 )
+
+
+def build_context_from_history(history: List[Dict], max_messages: int = None) -> str:
+    """Build context string from conversation history.
+
+    Args:
+        history: List of message dicts with 'role' and 'content'
+        max_messages: Maximum number of recent messages to include (default: from config)
+
+    Returns:
+        Formatted context string
+    """
+    if max_messages is None:
+        max_messages = ExtractionConfig.CONTEXT_MAX_MESSAGES
+
+    if not history:
+        return "Start of conversation"
+
+    recent = history[-max_messages:] if len(history) > max_messages else history
+    context_lines = []
+
+    for msg in recent:
+        role = "User" if msg['role'] == 'user' else "Assistant"
+        context_lines.append(f"{role}: {msg['content']}")
+
+    return "\n".join(context_lines)
 
 
 def extract_user_semantic_unit(state: BatchExtractionState) -> Dict:
@@ -66,6 +101,9 @@ def extract_user_semantic_unit(state: BatchExtractionState) -> Dict:
     import time
     import json as json_lib
     start = time.time()
+
+    # Build context from history (configured number of messages)
+    context = build_context_from_history(state.get('conversation_history', []))
 
     prompt = f"""TU EȘTI UN ANALIZOR DE CONVERSAȚII. NU PARTICIPI LA CONVERSAȚIE - DOAR O ANALIZEZI.
 
@@ -88,7 +126,7 @@ CONVERSAȚIE:
 ═══════════════════════════════════════════════════════════════════
 
 Context conversație (ultimele mesaje):
-{state['conversation_context']}
+{context}
 
 ═══════════════════════════════════════════════════════════════════
 MESAJ DE ANALIZAT:
@@ -158,9 +196,11 @@ def extract_assistant_semantic_unit(state: BatchExtractionState) -> Dict:
     """Stage 1b: Extract semantic unit for ASSISTANT message."""
 
     import time
+    import json as json_lib
     start = time.time()
 
-    import json as json_lib
+    # Build context from history (configured number of messages)
+    context = build_context_from_history(state.get('conversation_history', []))
 
     prompt = f"""TU EȘTI UN ANALIZOR DE CONVERSAȚII. NU PARTICIPI LA CONVERSAȚIE - DOAR O ANALIZEZI.
 
@@ -183,7 +223,7 @@ CONVERSAȚIE:
 ═══════════════════════════════════════════════════════════════════
 
 Context conversație (ultimele mesaje):
-{state['conversation_context']}
+{context}
 
 User message tocmai procesat: {json_lib.dumps(state['user_message'], ensure_ascii=False)}
 
@@ -401,157 +441,6 @@ CRITERII CALITATE:
         }
 
 
-def store_to_neo4j(state: BatchExtractionState) -> Dict:
-    """
-    Store propositions to Neo4j + SQLite archive.
-
-    - Generate embeddings
-    - Store in Neo4j (with NEXT and COHERENT edges)
-    - Archive in SQLite (traceability)
-    """
-    import time
-    start = time.time()
-
-    # Initialize storage clients
-    neo4j = Neo4jClient(
-        uri="bolt://172.105.85.181:7687",
-        user="neo4j",
-        password="test1234"
-    )
-
-    archive = ArchiveDB()
-    embedder = EmbeddingGenerator()
-
-    stored_ids = []
-
-    try:
-        # 1. Store messages in archive
-        archive.store_message(
-            state['user_message_id'],
-            "user",
-            state['user_message'],
-            state['timestamp']
-        )
-
-        archive.store_message(
-            state['assistant_message_id'],
-            "assistant",
-            state['assistant_message'],
-            state['timestamp']
-        )
-
-        # 2. Store semantic units in archive
-        archive.store_semantic_unit(
-            state['user_semantic_unit']['unit_id'],
-            state['user_message_id'],
-            state['user_semantic_unit']['content'],
-            state['user_semantic_unit']
-        )
-
-        archive.store_semantic_unit(
-            state['assistant_semantic_unit']['unit_id'],
-            state['assistant_message_id'],
-            state['assistant_semantic_unit']['content'],
-            state['assistant_semantic_unit']
-        )
-
-        # 3. Collect all propositions
-        all_props = []
-
-        for prop in state['user_propositions']:
-            all_props.append({
-                **prop,
-                'speaker': 'user',
-                'message_id': state['user_message_id'],
-                'semantic_unit_id': state['user_semantic_unit']['unit_id']
-            })
-
-        for prop in state['assistant_propositions']:
-            all_props.append({
-                **prop,
-                'speaker': 'assistant',
-                'message_id': state['assistant_message_id'],
-                'semantic_unit_id': state['assistant_semantic_unit']['unit_id']
-            })
-
-        # 4. Generate embeddings (batch)
-        prop_texts = [p['content'] for p in all_props]
-        embeddings = embedder.generate_batch(prop_texts)
-
-        # 5. Store propositions in Neo4j + archive
-        prev_prop_id = None
-
-        for prop, embedding in zip(all_props, embeddings):
-            # Create in Neo4j
-            neo_prop = neo4j.create_proposition(
-                content=prop['content'],
-                embedding=embedding,
-                type=prop['type'],
-                certainty=prop['certainty'],
-                concepts=prop.get('concepts', []),
-                source_message_id=prop['message_id'],
-                source_semantic_unit_id=prop['semantic_unit_id'],
-                speaker=prop['speaker'],
-                timestamp=state['timestamp']
-            )
-
-            prop_id = neo_prop['id']
-            stored_ids.append(prop_id)
-
-            # Archive proposition
-            archive.store_proposition(
-                prop_id,
-                prop['semantic_unit_id'],
-                prop['content'],
-                prop
-            )
-
-            # Create temporal edge (NEXT)
-            if prev_prop_id:
-                neo4j.create_temporal_edge(prev_prop_id, prop_id)
-
-            prev_prop_id = prop_id
-
-        # 6. Create semantic edges (COHERENT)
-        # Link each proposition to its top-10 most similar neighbors
-        for i, (prop_id, embedding) in enumerate(zip(stored_ids, embeddings)):
-            # Vector search for similar propositions
-            similar = neo4j.vector_search(
-                query_embedding=embedding,
-                k=11,  # +1 because it includes self
-                min_similarity=0.4
-            )
-
-            # Create edges to top neighbors (excluding self)
-            for neighbor in similar:
-                if neighbor['id'] == prop_id:
-                    continue  # Skip self
-
-                # Create semantic edge with exact similarity weight
-                neo4j.create_semantic_edge(
-                    prop_id,
-                    neighbor['id'],
-                    weight=neighbor['similarity'],
-                    created_by="extraction"
-                )
-
-        return {
-            "stored_proposition_ids": stored_ids,
-            "storage_time": time.time() - start
-        }
-
-    except Exception as e:
-        return {
-            "error": f"Storage error: {str(e)}",
-            "stored_proposition_ids": [],
-            "storage_time": time.time() - start
-        }
-
-    finally:
-        neo4j.close()
-        archive.close()
-
-
 # Build graph
 workflow = StateGraph(BatchExtractionState)
 
@@ -560,15 +449,20 @@ workflow.add_node("extract_user_su", extract_user_semantic_unit)
 workflow.add_node("extract_assistant_su", extract_assistant_semantic_unit)
 workflow.add_node("propositionalize_user", propositionalize_user)
 workflow.add_node("propositionalize_assistant", propositionalize_assistant)
-workflow.add_node("store_to_neo4j", store_to_neo4j)  # ← NEW!
+# Storage split into 3 nodes:
+workflow.add_node("generate_embeddings", generate_embeddings)
+workflow.add_node("store_propositions", store_propositions)
+workflow.add_node("create_edges", create_edges)
 
 # Add edges - linear flow
 workflow.set_entry_point("extract_user_su")
 workflow.add_edge("extract_user_su", "extract_assistant_su")
 workflow.add_edge("extract_assistant_su", "propositionalize_user")
 workflow.add_edge("propositionalize_user", "propositionalize_assistant")
-workflow.add_edge("propositionalize_assistant", "store_to_neo4j")  # ← NEW!
-workflow.add_edge("store_to_neo4j", END)
+workflow.add_edge("propositionalize_assistant", "generate_embeddings")
+workflow.add_edge("generate_embeddings", "store_propositions")
+workflow.add_edge("store_propositions", "create_edges")
+workflow.add_edge("create_edges", END)
 
 # Compile
 graph = workflow.compile()

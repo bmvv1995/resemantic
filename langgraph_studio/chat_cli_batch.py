@@ -17,16 +17,25 @@ from langchain_anthropic import ChatAnthropic
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from graphs.extraction_graph import graph
+from config import ChatConfig
 
 # Load environment
 load_dotenv()
 
-# Initialize chat model
-chat_model = ChatAnthropic(
-    model="claude-3-5-haiku-20241022",
-    temperature=0.7,
-    api_key=os.getenv("ANTHROPIC_API_KEY")
-)
+# Initialize chat model (with reasoning support if enabled)
+if ChatConfig.ENABLE_REASONING_DISPLAY:
+    chat_model = ChatAnthropic(
+        model=ChatConfig.REASONING_MODEL,
+        temperature=ChatConfig.CHAT_TEMPERATURE,
+        api_key=os.getenv("ANTHROPIC_API_KEY")
+    )
+    print(f"💭 REASONING MODE ENABLED (using {ChatConfig.REASONING_MODEL})")
+else:
+    chat_model = ChatAnthropic(
+        model=ChatConfig.CHAT_MODEL,
+        temperature=ChatConfig.CHAT_TEMPERATURE,
+        api_key=os.getenv("ANTHROPIC_API_KEY")
+    )
 
 # Conversation history
 conversation_history = []
@@ -68,12 +77,12 @@ def print_extraction_summary(role, result):
 
 
 def get_conversation_context():
-    """Get last 4-5 messages as formatted context."""
+    """Get last 2 messages (1 conversation pair) as context."""
     if not conversation_history:
         return "Start of conversation"
 
     context = []
-    for msg in conversation_history[-5:]:
+    for msg in conversation_history[-2:]:
         role = "User" if msg['role'] == 'user' else "Assistant"
         context.append(f"{role}: {msg['content']}")
 
@@ -95,13 +104,15 @@ def run_extraction_async(batch_input):
 
             # Storage summary
             stored_ids = result.get('stored_proposition_ids', [])
+            embedding_time = result.get('embedding_time', 0)
             storage_time = result.get('storage_time', 0)
+            edge_time = result.get('edge_creation_time', 0)
 
             print(f"\n💾 STORAGE:")
             print("-" * 80)
             print(f"   Propositions stored in Neo4j: {len(stored_ids)}")
             print(f"   Archive stored in SQLite: ✓")
-            print(f"   Storage time: {storage_time:.2f}s")
+            print(f"   Embeddings: {embedding_time:.2f}s | Storage: {storage_time:.2f}s | Edges: {edge_time:.2f}s")
             print("-" * 80)
 
             # Overall timing
@@ -110,10 +121,12 @@ def run_extraction_async(batch_input):
                 result.get('stage1_assistant_time', 0) +
                 result.get('stage2_user_time', 0) +
                 result.get('stage2_assistant_time', 0) +
-                storage_time
+                embedding_time +
+                storage_time +
+                edge_time
             )
             print(f"\n⏱️  TOTAL BATCH PROCESSING TIME: {total_time:.2f}s")
-            print(f"   (Stage 1: {result.get('stage1_user_time', 0) + result.get('stage1_assistant_time', 0):.2f}s | Stage 2: {result.get('stage2_user_time', 0) + result.get('stage2_assistant_time', 0):.2f}s | Storage: {storage_time:.2f}s)")
+            print(f"   (Stage 1: {result.get('stage1_user_time', 0) + result.get('stage1_assistant_time', 0):.2f}s | Stage 2: {result.get('stage2_user_time', 0) + result.get('stage2_assistant_time', 0):.2f}s | Storage: {embedding_time + storage_time + edge_time:.2f}s)")
             print("="*80 + "\n")
             print("👤 You: ", end="", flush=True)
         except Exception as e:
@@ -137,16 +150,27 @@ def chat_turn(user_input):
     messages.append({"role": "user", "content": user_input})
 
     response = chat_model.invoke(messages)
-    assistant_response = response.content
 
+    # Extract reasoning (thinking) if available
+    thinking = None
+    if hasattr(response, 'response_metadata'):
+        thinking = response.response_metadata.get('thinking')
+
+    # Display reasoning first (if available)
+    if thinking:
+        print("\n💭 REASONING:")
+        print("-" * 80)
+        print(thinking)
+        print("-" * 80)
+        print("\n🤖 Response: ", end="", flush=True)
+
+    assistant_response = response.content
     print(assistant_response)
 
     # Prepare extraction (but don't wait for it)
     timestamp = datetime.now().isoformat()
-    # Get context BEFORE adding current messages to history
-    context = get_conversation_context()
 
-    # Add to history AFTER getting context
+    # Add to history first
     conversation_history.append({"role": "user", "content": user_input})
     conversation_history.append({"role": "assistant", "content": assistant_response})
 
@@ -155,11 +179,17 @@ def chat_turn(user_input):
     message_counter += 1
     assistant_msg_id = f"msg_{message_counter:03d}"
 
-    # Run BATCH extraction in BACKGROUND (fire-and-forget)
+    # Capture reasoning if available (for storage in graph)
+    reasoning_content = None
+    if hasattr(response, 'response_metadata'):
+        reasoning_content = response.response_metadata.get('thinking')
+
+    # Send FULL conversation history - graph will extract context
     batch_input = {
         "user_message": user_input,
         "assistant_message": assistant_response,
-        "conversation_context": context,
+        "assistant_reasoning": reasoning_content,  # NEW: reasoning capture
+        "conversation_history": conversation_history[:-2],  # All messages BEFORE current pair
         "timestamp": timestamp,
         "user_message_id": user_msg_id,
         "assistant_message_id": assistant_msg_id
