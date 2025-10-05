@@ -47,7 +47,7 @@ def print_separator():
 
 
 def print_extraction_summary(role, result):
-    """Print extraction results for one message in a readable format."""
+    """Print extraction results WITH BLOCKS for one message in a readable format."""
     print(f"\n📊 SEMANTIC EXTRACTION ({role.upper()}):")
     print("-" * 80)
 
@@ -61,12 +61,33 @@ def print_extraction_summary(role, result):
     print(f"📝 Semantic Unit: {su.get('content', 'N/A')}")
     print(f"   Type: {su.get('type', 'N/A')} | Role: {su.get('narrative_role', 'N/A')}")
     print(f"   Concepts: {', '.join(su.get('concepts', []))}")
+    
+    # BLOCKS METADATA - NEW!
+    block_meta = su.get('block_metadata', {})
+    if block_meta:
+        print(f"\n   🏷️  BLOCKS METADATA:")
+        if block_meta.get('resource_url'):
+            print(f"      📎 Resource: {block_meta['resource_url']}")
+            if block_meta.get('resource_type'):
+                print(f"         Type: {block_meta['resource_type']}")
+        if block_meta.get('decision_choice'):
+            print(f"      ✅ Decision: {block_meta['decision_choice']}")
+            if block_meta.get('decision_reason'):
+                print(f"         WHY: {block_meta['decision_reason']}")
+        if block_meta.get('doc_filename'):
+            print(f"      📄 Document: {block_meta['doc_filename']}")
+            if block_meta.get('doc_location'):
+                print(f"         Location: {block_meta['doc_location']}")
 
     # Propositions
     props = result.get(props_key, [])
     print(f"\n⚛️  Propositions ({len(props)}):")
     for i, prop in enumerate(props, 1):
         print(f"   {i}. {prop.get('content', 'N/A')}")
+        # Show if prop has block metadata
+        prop_blocks = prop.get('block_metadata', {})
+        if prop_blocks and (prop_blocks.get('resource_url') or prop_blocks.get('decision_choice') or prop_blocks.get('doc_filename')):
+            print(f"      [has blocks: {', '.join([k for k in ['resource_url', 'decision_choice', 'doc_filename'] if prop_blocks.get(k)])}]")
 
     # Timings
     t1 = result.get(time_key1, 0)
@@ -206,6 +227,7 @@ def main():
     print("🧠 ReSemantic CLI Chat (FIRE-AND-FORGET Mode)")
     print("Conversational AI with Background Semantic Extraction")
     print("💬 Chat responds instantly | 🚀 Extraction runs in background")
+    print("🏷️  NOW WITH BLOCKS DISPLAY!")
     print_separator()
     print("Commands:")
     print("  /exit or /quit - Exit chat")

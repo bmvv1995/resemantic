@@ -136,7 +136,8 @@ def store_propositions(state: dict) -> Dict:
                 source_message_id=prop['message_id'],
                 source_semantic_unit_id=prop['semantic_unit_id'],
                 speaker=prop['speaker'],
-                timestamp=state['timestamp']
+                timestamp=state['timestamp'],
+                block_metadata=prop.get('block_metadata', {})
             )
 
             prop_id = neo_prop['id']

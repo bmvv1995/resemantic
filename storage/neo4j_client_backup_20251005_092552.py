@@ -1,4 +1,3 @@
-import json
 """
 Neo4j Client for Living Knowledge Ecosystem
 
@@ -112,7 +111,6 @@ class Neo4jClient:
         speaker: str,
         timestamp: str,
         proposition_id: Optional[str] = None,
-        block_metadata: Dict = None,
         **extra_metadata
     ) -> Dict[str, Any]:
         """
@@ -157,8 +155,7 @@ class Neo4jClient:
             weakness_reason: null,
             last_accessed: null,
             created_at: datetime($now),
-            updated_at: datetime($now),
-            block_metadata: $block_metadata
+            updated_at: datetime($now)
         })
         RETURN p
         """
@@ -174,8 +171,7 @@ class Neo4jClient:
             "source_semantic_unit_id": source_semantic_unit_id,
             "speaker": speaker,
             "timestamp": timestamp,
-            "now": now,
-            "block_metadata": json.dumps(block_metadata) if block_metadata else "{}"
+            "now": now
         }
 
         # Add extra metadata
