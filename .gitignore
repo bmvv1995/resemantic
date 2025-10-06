@@ -1,7 +1,8 @@
 # Virtual environments
 venv/
 langgraph_env/
-streamlit_app/venv/
+env/
+*.venv/
 
 # Python
 __pycache__/
@@ -9,21 +10,31 @@ __pycache__/
 *$py.class
 *.so
 .Python
+*.egg-info/
+dist/
+build/
 
 # Environment variables
 .env
+.env.local
 
 # Data files
 data/
 *.db
 *.sqlite
+*.sqlite3
 
 # IDE
 .vscode/
 .idea/
+.claude/
+*.swp
+*.swo
+*~
 
 # Logs
 *.log
+logs/
 
 # Neo4j
 neo4j/
@@ -31,3 +42,36 @@ neo4j/
 # Test outputs
 results/
 output/
+reports/
+
+# Backup files (prevent creation)
+*_backup_*.py
+*_old.py
+*.bak
+*.backup
+
+# Generated reports & analysis (prevent clutter)
+*.json
+!langgraph.json
+!package.json
+!requirements.json
+!test_conversation.json
+*_results.json
+*_comparison.json
+*_analysis.json
+
+# Temporary & experimental
+tmp/
+temp/
+archive/
+experiments/
+scratch/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Certificates (security)
+*.pem
+*.key
+*.crt

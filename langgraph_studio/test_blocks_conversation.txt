@@ -1,1 +1,0 @@
-am decis să folosesc webhook retry pentru sync Shopify, documentația e la https://shopify.dev/api/retry
