@@ -163,6 +163,23 @@ class Neo4jClient:
         RETURN p
         """
 
+        # Validate block_metadata is dict, not string (avoid double encoding in pipeline)
+        if block_metadata and isinstance(block_metadata, str):
+            raise ValueError(f"block_metadata must be dict at storage layer, got string: {block_metadata[:100]}")
+
+        # Neo4j limitation: nested dicts must be JSON string for storage
+        # Why: Neo4j properties cannot be nested maps (type error)
+        # Trade-off: Store as JSON string → query with CONTAINS (less efficient)
+        #
+        # CORRECT Flow:
+        # 1. Pipeline: dict → dict → dict (NO encoding in prompts!)
+        # 2. Storage (HERE): dict → json.dumps() → string in Neo4j
+        # 3. Retrieval: string → json.loads() → dict
+        #
+        # Query impact:
+        # ❌ WHERE p.block_metadata.resource_url = "..." (doesn't work)
+        # ✅ WHERE p.block_metadata CONTAINS '"resource_url"' (works but slower)
+
         params = {
             "id": proposition_id,
             "content": content,

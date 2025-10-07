@@ -16,7 +16,7 @@ from langchain_anthropic import ChatAnthropic
 # Add parent directory to path for imports
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from graphs.extraction_graph import graph
+from graphs.extraction_graph import graph, invoke_clean
 from config import ChatConfig
 
 # Load environment
@@ -114,7 +114,8 @@ def run_extraction_async(batch_input):
     """Run extraction in background thread."""
     def _run():
         try:
-            result = graph.invoke(batch_input)
+            # Use clean invoke (no embeddings in output)
+            result = invoke_clean(batch_input)
 
             # Print extraction summaries
             print("\n" + "="*80)

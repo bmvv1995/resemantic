@@ -116,3 +116,44 @@ __all__ = [
     'SQLiteConfig',
     'LangSmithConfig'
 ]
+
+# ============================================
+# EXTRACTION VERSION CONTROL
+# ============================================
+
+class ExtractionVersion:
+    """
+    Control which extraction pipeline to use.
+    
+    V1 (original):
+    - Extract from user message
+    - Extract from assistant message
+    - Extract from assistant reasoning (if available)
+    
+    V2 (optimized):
+    - Extract from user message (FACTS focus)
+    - Extract from reasoning ONLY (LOGIC focus)
+    - Assistant message: RAW storage, NO extraction
+    
+    Benefits V2:
+    - 33% faster (2 LLM calls vs 3)
+    - Zero redundancy (reasoning contains all semantic)
+    - Richer context (reasoning has WHY, alternatives, drifts)
+    - Clearer separation (facts vs logic)
+    """
+    
+    # Toggle extraction version
+    VERSION = "v1"  # Options: "v1", "v2"
+    
+    # V2 specific settings
+    V2_USER_FOCUS = "facts, URLs, technical specs, concrete data"
+    V2_REASONING_FOCUS = "interpretations, decisions, alternatives, drifts"
+    
+    @classmethod
+    def is_v2(cls):
+        return cls.VERSION == "v2"
+    
+    @classmethod
+    def get_version(cls):
+        return cls.VERSION
+

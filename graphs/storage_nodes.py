@@ -35,12 +35,16 @@ def generate_embeddings(state: dict) -> Dict:
                 'semantic_unit_id': state['user_semantic_unit']['unit_id']
             })
 
-        for prop in state.get('assistant_propositions', []):
+        # V2: reasoning_propositions, V1: assistant_propositions
+        assistant_props = state.get('reasoning_propositions') or state.get('assistant_propositions', [])
+        semantic_unit = state.get('reasoning_semantic_unit') or state.get('assistant_semantic_unit', {})
+        
+        for prop in assistant_props:
             all_props.append({
                 **prop,
                 'speaker': 'assistant',
                 'message_id': state['assistant_message_id'],
-                'semantic_unit_id': state['assistant_semantic_unit']['unit_id']
+                'semantic_unit_id': semantic_unit.get('unit_id', state['assistant_message_id'])
             })
 
         # Generate embeddings (batch)
@@ -114,12 +118,15 @@ def store_propositions(state: dict) -> Dict:
             state['user_semantic_unit']
         )
 
-        archive.store_semantic_unit(
-            state['assistant_semantic_unit']['unit_id'],
-            state['assistant_message_id'],
-            state['assistant_semantic_unit']['content'],
-            state['assistant_semantic_unit']
-        )
+        # V2: reasoning_semantic_unit, V1: assistant_semantic_unit
+        asst_su = state.get('reasoning_semantic_unit') or state.get('assistant_semantic_unit', {})
+        if asst_su:
+            archive.store_semantic_unit(
+                asst_su.get('unit_id', state['assistant_message_id']),
+                state['assistant_message_id'],
+                asst_su.get('content', ''),
+                asst_su
+            )
 
         # 3. Store propositions in Neo4j + archive
         all_props = state.get('all_propositions', [])

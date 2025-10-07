@@ -239,7 +239,7 @@ Return ONLY JSON array (no markdown):
         "content": "atomic self-contained proposition",
         "type": "{su.get('type', 'statement')}",
         "certainty": "{su.get('certainty', 'medium')}",
-        "block_metadata": {json.dumps(su.get('block_metadata', {}), ensure_ascii=False)},
+        "block_metadata": {su.get('block_metadata', {})},
         "concepts": ["concept1", "concept2"]
     }}
 ]
@@ -298,7 +298,7 @@ Return ONLY JSON array (no markdown):
         "content": "atomic self-contained proposition",
         "type": "{su.get('type', 'response')}",
         "certainty": "{su.get('certainty', 'medium')}",
-        "block_metadata": {json.dumps(su.get('block_metadata', {}), ensure_ascii=False)},
+        "block_metadata": {su.get('block_metadata', {})},
         "concepts": ["concept1", "concept2"]
     }}
 ]
@@ -354,3 +354,26 @@ workflow.add_edge("store_propositions", "create_edges")
 workflow.add_edge("create_edges", END)
 
 graph = workflow.compile()
+
+
+def invoke_clean(batch_input: dict) -> dict:
+    """
+    Invoke extraction graph and return CLEAN result (no embeddings).
+
+    Embeddings are stored in Neo4j - no need in output/logs.
+    This prevents bloat (1536 floats × N propositions).
+
+    Args:
+        batch_input: Same as graph.invoke()
+
+    Returns:
+        Result dict WITHOUT proposition_embeddings field
+    """
+    result = graph.invoke(batch_input)
+
+    # Remove embeddings (storage concern, not output concern)
+    return {k: v for k, v in result.items() if k != 'proposition_embeddings'}
+
+
+# Export for easier imports
+__all__ = ['graph', 'invoke_clean']
