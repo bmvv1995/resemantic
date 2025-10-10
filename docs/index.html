@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ramses - Memory built to last millennia. A philosophical approach to AI memory through atomic blocks, dimensional architecture, and emergent intelligence.">
+    <title>Ramses - Memory Built to Last Millennia</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --sandstone: #D4A574;
+            --lapis: #1B4B7D;
+            --stone-gray: #4A4A4A;
+            --gold-accent: #C9A961;
+            --papyrus: #F5F0E8;
+            --dark-stone: #2A2A2A;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: var(--dark-stone);
+            background: var(--papyrus);
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+        
+        header {
+            text-align: center;
+            margin: 4rem 0 6rem 0;
+            border-bottom: 3px solid var(--sandstone);
+            padding-bottom: 3rem;
+        }
+        
+        .monument {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 0.3rem;
+            text-transform: uppercase;
+            color: var(--lapis);
+            margin-bottom: 1rem;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: var(--stone-gray);
+            font-style: italic;
+            margin-top: 1rem;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
+            color: var(--lapis);
+            margin: 4rem 0 2rem 0;
+            border-left: 5px solid var(--gold-accent);
+            padding-left: 1rem;
+        }
+        
+        h3 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--stone-gray);
+            margin: 2.5rem 0 1rem 0;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+        }
+        
+        .philosophy-intro {
+            font-size: 1.4rem;
+            font-style: italic;
+            color: var(--stone-gray);
+            border-left: 3px solid var(--sandstone);
+            padding-left: 1.5rem;
+            margin: 3rem 0;
+        }
+        
+        .pillar {
+            background: white;
+            border: 1px solid var(--sandstone);
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .pillar-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--lapis);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+        
+        code {
+            font-family: 'IBM Plex Mono', monospace;
+            background: var(--papyrus);
+            padding: 0.2rem 0.5rem;
+            border: 1px solid var(--sandstone);
+            font-size: 0.95rem;
+        }
+        
+        pre {
+            background: white;
+            border: 1px solid var(--sandstone);
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            background: var(--lapis);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin: 5rem -1.5rem 3rem -1.5rem;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            border: none;
+            padding: 0;
+            margin-bottom: 2rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 0.1rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: var(--gold-accent);
+            color: var(--dark-stone);
+            border: 2px solid var(--gold-accent);
+        }
+        
+        .btn-primary:hover {
+            background: transparent;
+            color: white;
+            border-color: white;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+        
+        .btn-secondary:hover {
+            background: white;
+            color: var(--lapis);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 5rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--sandstone);
+            color: var(--stone-gray);
+            font-size: 1rem;
+        }
+        
+        .ornament {
+            text-align: center;
+            margin: 3rem 0;
+            color: var(--gold-accent);
+            font-size: 1.5rem;
+            letter-spacing: 1rem;
+        }
+        
+        ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+        
+        strong {
+            color: var(--lapis);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.1rem;
+                padding: 1.5rem 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+                letter-spacing: 0.2rem;
+            }
+            
+            .monument {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="monument">🏛️</div>
+        <h1>Ramses</h1>
+        <p class="tagline">Memory Built to Last Millennia</p>
+    </header>
+
+    <section id="vision">
+        <p class="philosophy-intro">
+            Three thousand years ago, Ramses built monuments that would outlast empires. 
+            Today, we build memory that will outlast the conversations it preserves.
+        </p>
+        
+        <p>
+            Like the monuments of ancient Egypt, true memory requires foundation blocks, 
+            architectural precision, and construction designed for eternity. Not compression 
+            that loses detail. Not selection that filters truth. But <strong>complete preservation</strong> 
+            through atomic units, multi-dimensional structure, and emergent intelligence.
+        </p>
+        
+        <p>
+            We are building a memory system that preserves conversations the way Ramses 
+            preserved his legacy—block by block, dimension by dimension, designed to 
+            compound understanding across infinite time.
+        </p>
+        
+        <div class="ornament">▭ ▭ ▭</div>
+    </section>
+
+    <section id="philosophy">
+        <h2>The Architecture of Memory</h2>
+        
+        <div class="pillar">
+            <div class="pillar-title">I. On Atomic Blocks</div>
+            <p>
+                The pyramids were not built in single pieces, but from 2.3 million blocks—each 
+                cut to precision, each placed with purpose, each preserved for eternity.
+            </p>
+            <p>
+                So too with memory. We <strong>atomize conversations into semantic units</strong>: 
+                indivisible blocks of meaning that withstand the passage of time and can be 
+                recombined into new structures of thought.
+            </p>
+            <p>
+                <strong>No filtering at extraction. No judgment about significance.</strong> 
+                Everything atomic is preserved. Relevance emerges through use, not through 
+                premature selection.
+            </p>
+            <pre>Every statement becomes stone.
+Every insight, a building block.
+Nothing crumbles. Nothing is lost.</pre>
+        </div>
+        
+        <div class="pillar">
+            <div class="pillar-title">II. On Dimensional Architecture</div>
+            <p>
+                A temple is not merely walls. It is geometry: columns rise, arches span, 
+                chambers connect across multiple dimensions.
+            </p>
+            <p>
+                Memory requires the same thinking. Not flat storage, but <strong>dimensional space</strong> 
+                where temporal, semantic, and contextual axes intersect—creating chambers of 
+                understanding accessible from infinite angles.
+            </p>
+            <pre>Temporal dimension:   When it was understood
+Semantic dimension:   What it relates to
+Contextual dimension: Why it matters
+Meta dimension:       How to engage with it</pre>
+            <p>
+                Navigate memory like exploring a palace—different paths, different chambers, 
+                infinite perspectives on the same truth.
+            </p>
+        </div>
+        
+        <div class="pillar">
+            <div class="pillar-title">III. On Emergent Patterns</div>
+            <p>
+                The Nile carved the valley not in days, but through millennia of patient 
+                flow—revealing patterns no architect planned.
+            </p>
+            <p>
+                Memory evolves the same way. <strong>Connections strengthen where thought flows 
+                frequently.</strong> Unused paths fade like trails in sand. Patterns emerge not 
+                from design, but from the natural geography of thinking.
+            </p>
+            <pre>Connections used frequently → Strengthen (worn paths)
+Connections rarely accessed → Fade (covered trails)
+Patterns discovered through use → Crystallize naturally</pre>
+            <p>
+                The system learns not what we tell it, but what you show it through use. 
+                Intelligence emerges organically, not programmatically.
+            </p>
+        </div>
+        
+        <div class="pillar">
+            <div class="pillar-title">IV. On Complete Preservation</div>
+            <p>
+                Ramses inscribed temple walls with complete records—victories and defeats, 
+                treaties and conflicts, wisdom and uncertainty.
+            </p>
+            <p>
+                We preserve conversations completely. Not just successful exchanges, but:
+            </p>
+            <ul>
+                <li><strong>Reasoning traces</strong> — the thinking beneath responses</li>
+                <li><strong>Uncertainties</strong> — where confidence was low</li>
+                <li><strong>Contradictions</strong> — tensions in understanding</li>
+                <li><strong>Meta-preferences</strong> — how you want to engage</li>
+            </ul>
+            <p>
+                Completeness is the only honest memory. What endures, teaches.
+            </p>
+        </div>
+        
+        <div class="ornament">▭ ▭ ▭</div>
+    </section>
+
+    <section id="result">
+        <h2>The Result</h2>
+        
+        <p>
+            Memory that is:
+        </p>
+        
+        <ul>
+            <li><strong>Comprehensive</strong> — complete preservation, nothing lost</li>
+            <li><strong>Architectural</strong> — multi-dimensional structure, infinitely navigable</li>
+            <li><strong>Intelligent</strong> — emergent patterns through organic use</li>
+            <li><strong>Eternal</strong> — built to compound indefinitely</li>
+        </ul>
+        
+        <p>
+            Not a database. <strong>A monument to understanding</strong>—built block by block, 
+            designed to last.
+        </p>
+    </section>
+
+    <section id="construction">
+        <h2>Construction Status</h2>
+        
+        <p>
+            Like any monument worth building, Ramses is constructed in phases:
+        </p>
+        
+        <h3>Phase I: Foundation (Complete)</h3>
+        <ul>
+            <li>Two-stage extraction: Messages → Semantic Units → Atomic Propositions</li>
+            <li>Graph storage with temporal and semantic edges</li>
+            <li>Vector embeddings for semantic navigation</li>
+            <li>Reasoning trace capture through extended thinking</li>
+        </ul>
+        
+        <h3>Phase II: Consolidation (In Progress)</h3>
+        <ul>
+            <li>Sleep cycles: strengthen, weaken, discover patterns</li>
+            <li>Memory blocks: proactive context shaping</li>
+            <li>Multi-dimensional traversal</li>
+        </ul>
+        
+        <h3>Phase III: Intelligence (Planned)</h3>
+        <ul>
+            <li>Tool execution with memory context</li>
+            <li>Agent reasoning integration</li>
+            <li>Cross-conversation pattern synthesis</li>
+        </ul>
+        
+        <p style="margin-top: 2rem;">
+            <strong>We are building in public.</strong> Follow our construction logs, study our 
+            blueprints, join fellow builders in shaping the future of AI memory.
+        </p>
+    </section>
+
+    <div class="cta-section">
+        <h2>Join the Builders</h2>
+        <p style="font-size: 1.1rem; margin-bottom: 2rem;">
+            Memory this enduring requires collaboration. Whether you write code, shape philosophy, 
+            or test foundations—there is a place for you in construction.
+        </p>
+        <div class="cta-buttons">
+            <a href="https://github.com/bmvv1995/resemantic" class="btn btn-primary" target="_blank">View Blueprints</a>
+            <a href="https://github.com/bmvv1995/resemantic/discussions" class="btn btn-secondary" target="_blank">Enter the Guild</a>
+        </div>
+    </div>
+
+    <section id="about">
+        <h2>About This Project</h2>
+        
+        <p>
+            <strong>Ramses</strong> (RAM-Semantic-System) emerged from a simple question: 
+            What if we treated AI memory the way ancient builders treated monuments—designed 
+            for permanence, built from atomic units, structured with precision?
+        </p>
+        
+        <p>
+            The result is a four-pillar architecture combining:
+        </p>
+        
+        <ul>
+            <li><strong>OLAP organization</strong> — multi-dimensional analytical structure</li>
+            <li><strong>Proactive blocks</strong> — active agenda shaping interaction</li>
+            <li><strong>Emergent evolution</strong> — spontaneous relevance through usage</li>
+            <li><strong>Reasoning extraction</strong> — atomic consistency with meta-level depth</li>
+        </ul>
+        
+        <p>
+            Building on insights from Letta/MemGPT (context management), Zep (temporal graphs), 
+            and SGMem (sentence granularity)—while introducing novel approaches to atomization 
+            without judgment and emergence through usage patterns.
+        </p>
+        
+        <p>
+            <strong>Not better or worse than existing approaches—different optimization target:</strong> 
+            complete historical preservation with self-organizing intelligence and multi-dimensional 
+            analytical access.
+        </p>
+    </section>
+
+    <footer>
+        <p>
+            <strong>Ramses</strong> — Memory built to last millennia
+        </p>
+        <p style="margin-top: 1rem; font-size: 0.9rem;">
+            Block by block. Epoch by epoch. What endures, teaches.
+        </p>
+        <p style="margin-top: 2rem; font-size: 0.9rem;">
+            🏛️ Built with stone and silicon
+        </p>
+    </footer>
+</body>
+</html>
